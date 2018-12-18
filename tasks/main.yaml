@@ -9,7 +9,7 @@
       gpgcheck: no
       description: "MariaDB Repo"
 
-  - packages:
+  - package:
       name: "{{item}}"
     with_items:
       - mariadb-server
