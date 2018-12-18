@@ -2,17 +2,73 @@
   - name: "Disable selinux"
     selinux:
       state: disabled
+    tags: install
 
   - yum_repository:
       name: mariaDB
-      baseurl: http://yum.mariadb.org/10.2.9/centos7-amd64
-      gpgcheck: no
+      baseurl: http://yum.mariadb.org/10.3/rhel7-amd64
+      gpgkey: https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
       description: "MariaDB Repo"
+    tags: install
 
   - package:
       name: "{{item}}"
     with_items:
       - mariadb-server
-      - mariadb-client
       - galera
       - rsync
+    tags: install
+
+  - name: Make sure a mariadb is running
+    systemd:
+      state: started
+      enabled: yes
+      name: mariadb
+    tags: install
+
+  - name: "Fetch other node addresses"
+    ec2_instance_facts:
+      filters:
+        "tag:environment": "{{env}}"
+        "tag:role": "{{db_role}}"
+    register: "nodes"
+    delegate_to: localhost
+    become: no
+
+  - ec2_metadata_facts:
+    become: no
+
+  - set_fact:
+      wsrep_cluster_address: "gcomm://{{ nodes.instances|map(attribute='private_ip_address')|list|join(',') }}"
+    become: no
+
+  - set_fact:
+      wsrep_node_address: "{{ansible_default_ipv4.address }}"
+    become: no
+
+  - set_fact:
+      wsrep_node_name: "{{ansible_ec2_local_hostname}}"
+    become: no
+
+  - name: Obtain EC2 tags for this instance
+    ec2_tag:
+      region: "{{ ansible_ec2_placement_region }}"
+      resource: "{{ ansible_ec2_instance_id }}"
+      state: list
+    register: ec2_tags
+    become: no
+    delegate_to: localhost
+
+  - template:
+      src: "my.cnf.j2"
+      dest: "/etc/my.cnf.d/server.cnf"
+    notify: "start galera"
+    when: ec2_tags.tags.master == 'true'
+
+  - meta: flush_handlers
+
+  - template:
+      src: "my.cnf.j2"
+      dest: "/etc/my.cnf.d/server.cnf"
+    notify: "restart mariadb"
+    when: ec2_tags.tags.master == 'false'

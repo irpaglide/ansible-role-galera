@@ -1,0 +1,8 @@
+---
+- name: restart mariadb
+  systemd:
+    state: restarted
+    name: mariadb
+
+- name: start galera
+  shell: galera_new_cluster
