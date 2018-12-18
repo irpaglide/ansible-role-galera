@@ -8,3 +8,11 @@
       baseurl: http://yum.mariadb.org/10.2.9/centos7-amd64
       gpgcheck: no
       description: "MariaDB Repo"
+
+  - packages:
+      name: "{{item}}"
+    with_items:
+      - mariadb-server
+      - mariadb-client
+      - galera
+      - rsync
