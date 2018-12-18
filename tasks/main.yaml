@@ -1,0 +1,10 @@
+---
+  - name: "Disable selinux"
+    selinux:
+      state: disabled
+
+  - yum_repository:
+      name: mariaDB
+      baseurl: http://yum.mariadb.org/10.2.9/centos7-amd64
+      gpgcheck: no
+      description: "MariaDB Repo"
