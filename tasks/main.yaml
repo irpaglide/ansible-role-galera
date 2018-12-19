@@ -2,14 +2,12 @@
   - name: "Disable selinux"
     selinux:
       state: disabled
-    tags: install
 
   - yum_repository:
       name: mariaDB
       baseurl: http://yum.mariadb.org/10.3/rhel7-amd64
       gpgkey: https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
       description: "MariaDB Repo"
-    tags: install
 
   - package:
       name: "{{item}}"
@@ -17,14 +15,12 @@
       - mariadb-server
       - galera
       - rsync
-    tags: install
 
   - name: Make sure a mariadb is running
     systemd:
       state: started
       enabled: yes
       name: mariadb
-    tags: install
 
   - name: "Fetch other node addresses"
     ec2_instance_facts:
