@@ -35,21 +35,14 @@
     delegate_to: localhost
     become: no
 
-
-  - name: "build cluster address"
-    set_fact:
-      wsrep_cluster_address: ""
-
-  - set_fact:
-      wsrep_cluster_address: "{{wsrep_cluster_address}},{{item.private_ip_addresses.0.private_ip_address}}"
-    with_items: "{{nodes.instances}}"
+  - debug: msg="{{ansible_all_ipv4_addresses}}"
 
   - ec2_metadata_facts:
     become: no
 
-#  - set_fact:
-#      wsrep_cluster_address: "gcomm://{{ nodes.instances.values()|map(attribute='private_ip_address')|list|join(',') }}"
-#    become: no
+  - set_fact:
+      wsrep_cluster_address: "gcomm://{{nodes.instances|map(attribute='private_ip_address')|list }}"
+    become: no
 
   - set_fact:
       wsrep_node_address: "{ansible_ec2_local_ipv4 }}"
