@@ -67,13 +67,11 @@
   - template:
       src: "my.cnf.j2"
       dest: "/etc/my.cnf.d/server.cnf"
-    notify: "start galera"
     when: ec2_tags.tags.master == 'true'
 
   - template:
       src: "my.cnf.j2"
       dest: "/etc/my.cnf.d/server.cnf"
-    notify: "restart mariadb"
     when: ec2_tags.tags.master == 'false'
 
   - name: Reboot master
