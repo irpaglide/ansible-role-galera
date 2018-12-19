@@ -70,10 +70,32 @@
     notify: "start galera"
     when: ec2_tags.tags.master == 'true'
 
-  - meta: flush_handlers
-
   - template:
       src: "my.cnf.j2"
       dest: "/etc/my.cnf.d/server.cnf"
     notify: "restart mariadb"
     when: ec2_tags.tags.master == 'false'
+
+  - name: Reboot master
+    shell: reboot
+    async: 0
+    poll: 0
+    delegate_to: "{{item}}"
+    with_items: "{{groups.tag_master_true}}"
+
+  - name: Wait for Master
+    local_action: wait_for host={{ ansible_ssh_host }} state=started
+    delegate_to: "{{item}}"
+    with_items: "{{groups.tag_master_true}}"
+
+  - name: Reboot nodes
+    shell: reboot
+    async: 0
+    poll: 0
+    delegate_to: "{{item}}"
+    with_items: "{{groups.tag_master_false}}"
+
+  - name: Wait for Master
+    local_action: wait_for host={{ ansible_ssh_host }} state=started
+    delegate_to: "{{item}}"
+    with_items: "{{groups.tag_master_false}}"
