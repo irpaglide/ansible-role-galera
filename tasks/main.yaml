@@ -81,8 +81,7 @@
     with_items: "{{groups.tag_master_true}}"
 
   - name: Wait for Master
-    local_action: wait_for host={{ ansible_ssh_host }} state=started
-    delegate_to: "{{item}}"
+    local_action: wait_for host={{ item }} state=started
     with_items: "{{groups.tag_master_true}}"
 
   - name: Reboot slaves
@@ -92,6 +91,5 @@
     with_items: "{{groups.tag_master_false}}"
 
   - name: Wait for Slaves
-    local_action: wait_for host={{ ansible_ssh_host }} state=started
-    delegate_to: "{{item}}"
+    local_action: wait_for host={{ item }} state=started
     with_items: "{{groups.tag_master_false}}"
