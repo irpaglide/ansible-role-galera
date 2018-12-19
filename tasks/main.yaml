@@ -46,6 +46,7 @@
   - set_fact:
       groupnamemaster: "db-{{env}}-master"
 
+  - debug: msg="{{groups}}"
   - set_fact:
       wsrep_cluster_address: "gcomm://{{groups[groupnamemaster][0]|join(',')}},{{groups[groupnameslaves]|join(',')}}"
     become: no
