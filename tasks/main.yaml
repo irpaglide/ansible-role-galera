@@ -95,7 +95,7 @@
     delegate_to: "{{item}}"
     with_items: "{{groups.tag_master_false}}"
 
-  - name: Wait for Master
+  - name: Wait for Slaves
     local_action: wait_for host={{ ansible_ssh_host }} state=started
     delegate_to: "{{item}}"
     with_items: "{{groups.tag_master_false}}"
