@@ -48,7 +48,7 @@
 
   - debug: msg="{{groups}}"
   - set_fact:
-      wsrep_cluster_address: "gcomm://{{tag_master_true[0]}},{{tag_master_false[0]|join(',')}}"
+      wsrep_cluster_address: "gcomm://{{groups['tag_master_true'][0]}},{{groups['tag_master_false']|join(',')}}"
     become: no
 
   - set_fact:
