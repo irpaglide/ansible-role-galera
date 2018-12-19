@@ -35,7 +35,7 @@
     delegate_to: localhost
     become: no
 
-  - debug: msg="{{nodes.instances}}"
+  - debug: msg="{{nodes.instances.0.private_ip_address}}"
 
   - ec2_metadata_facts:
     become: no
