@@ -33,9 +33,11 @@
         "tag:role": "{{db_role}}"
     register: "nodes"
     delegate_to: localhost
+    delegate_facts: true
     become: no
+    run_once: true
 
-  - debug: msg="{{ansible_all_ipv4_addresses}}"
+  - debug: msg="{{groups['db-{{env}}']}}"
 
   - ec2_metadata_facts:
     become: no
