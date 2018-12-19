@@ -67,12 +67,6 @@
   - template:
       src: "my.cnf.j2"
       dest: "/etc/my.cnf.d/server.cnf"
-    when: ec2_tags.tags.master == 'true'
-
-  - template:
-      src: "my.cnf.j2"
-      dest: "/etc/my.cnf.d/server.cnf"
-    when: ec2_tags.tags.master == 'false'
 
   - name: Reboot master
     reboot:
