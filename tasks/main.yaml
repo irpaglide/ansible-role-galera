@@ -35,7 +35,8 @@
     delegate_to: localhost
     become: no
 
-  - debug: msg="{{nodes}}"
+  - debug: msg="{{nodes.instances}}"
+
   - ec2_metadata_facts:
     become: no
 
