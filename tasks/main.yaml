@@ -35,13 +35,16 @@
     delegate_to: localhost
     become: no
 
-  - debug: msg="{{nodes.instances.0.private_ip_address}}"
+  #- name: "build cluster address"
+  #  set_fact:
+  #    wsrep_cluster_address: "{{wsrep_cluster_address}},{{item.private_ip_address}}"
+  #  with_items: "{{nodes.instances}}"
 
   - ec2_metadata_facts:
     become: no
 
   - set_fact:
-      wsrep_cluster_address: "gcomm://{{ nodes.instances|map(attribute='private_ip_address')|list|join(',') }}"
+      wsrep_cluster_address: "gcomm://{{ nodes.instances.values()|map(attribute='private_ip_address')|list|join(',') }}"
     become: no
 
   - set_fact:
