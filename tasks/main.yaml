@@ -75,9 +75,8 @@
     when: ec2_tags.tags.master == 'false'
 
   - name: Reboot master
-    shell: reboot
-    async: 0
-    poll: 0
+    reboot:
+      reboot_timeout: 3600
     delegate_to: "{{item}}"
     with_items: "{{groups.tag_master_true}}"
 
@@ -87,9 +86,8 @@
     with_items: "{{groups.tag_master_true}}"
 
   - name: Reboot slaves
-    shell: reboot
-    async: 0
-    poll: 0
+    reboot:
+      reboot_timeout: 3600
     delegate_to: "{{item}}"
     with_items: "{{groups.tag_master_false}}"
 
