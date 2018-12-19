@@ -43,7 +43,10 @@
     become: no
 
   - set_fact:
-      wsrep_cluster_address: "gcomm://{{groups['db-{{env}}']|join(,)}}"
+      groupname: "db-{{env}}"
+
+  - set_fact:
+      wsrep_cluster_address: "gcomm://{{groups[groupname]|join(,)}}"
     become: no
 
   - set_fact:
