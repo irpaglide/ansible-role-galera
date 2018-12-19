@@ -88,7 +88,7 @@
     delegate_to: "{{item}}"
     with_items: "{{groups.tag_master_true}}"
 
-  - name: Reboot nodes
+  - name: Reboot slaves
     shell: reboot
     async: 0
     poll: 0
