@@ -35,8 +35,12 @@
     delegate_to: localhost
     become: no
 
+
   - name: "build cluster address"
     set_fact:
+      wsrep_cluster_address: ""
+
+  - set_fact:
       wsrep_cluster_address: "{{wsrep_cluster_address}},{{item.private_ip_address}}"
     with_items: "{{nodes.instances}}"
 
