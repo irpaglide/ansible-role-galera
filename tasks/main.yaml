@@ -43,10 +43,13 @@
     become: no
 
   - set_fact:
-      groupname: "db-{{env}}"
+      groupnameslaves: "db-{{env}}-slaves"
 
   - set_fact:
-      wsrep_cluster_address: "gcomm://{{groups[groupname]|join(',')}}"
+      groupnamemaster: "db-{{env}}-master"
+
+  - set_fact:
+      wsrep_cluster_address: "gcomm://{{groups[groupnamemaster][0]|join(',')}},{{groups[groupnameslaves]|join(',')}}"
     become: no
 
   - set_fact:
