@@ -37,8 +37,6 @@
     become: no
     run_once: true
 
-  - debug: msg="{{groups['db-staging']}}"
-
   - ec2_metadata_facts:
     become: no
 
