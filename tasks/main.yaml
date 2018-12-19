@@ -43,7 +43,7 @@
     become: no
 
   - set_fact:
-      wsrep_cluster_address: "gcomm://{{nodes.instances|map(attribute='private_ip_address')|list }}"
+      wsrep_cluster_address: "gcomm://{{groups['db-staging']|join(,)}}"
     become: no
 
   - set_fact:
