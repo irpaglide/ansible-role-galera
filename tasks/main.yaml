@@ -41,7 +41,7 @@
       wsrep_cluster_address: ""
 
   - set_fact:
-      wsrep_cluster_address: "{{wsrep_cluster_address}},{{item.private_ip_address}}"
+      wsrep_cluster_address: "{{wsrep_cluster_address}},{{item.private_ip_addresses.0.private_ip_address}}"
     with_items: "{{nodes.instances}}"
 
   - ec2_metadata_facts:
