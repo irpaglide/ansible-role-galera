@@ -38,7 +38,7 @@
     become: no
 
   - set_fact:
-      wsrep_cluster_address: "gcomm://{{groups['tag_master_true'][0]}},{{ansible_ec2_local_ipv4}}}"
+      wsrep_cluster_address: "gcomm://{{groups['tag_master_true'][0]}},{{ansible_ec2_local_ipv4}}"
     become: no
 
   - set_fact:
